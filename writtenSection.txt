@@ -1,29 +1,79 @@
 Answer each question in a written format
 
+==== Probably want to toggle word-wrap unless you enjoy side-scrolling. ====
+
 1. What does semantic HTML mean?
+    Semantic HTML is using descriptive (or Semantic) tags in your HTML layout that help easily explain what each tag is representing rather than only caring how the tags will display on the screen(Extensive use of Div tags as an example). Apart from making code easier to read, semantic HTML use greatly increases the quality of user experience for anyone with disabilities that require the use of a screen reader or other accessibility tools. Using semantic HTML also helps search engines return pages that more accurately fit the search criteria and could potentially lead to increased traffic of your site. There are many default semantic tags, but you can also create custom semantic tags fairly easily if the need arises. 
 
 2. What is the box model?
+    The box model refers to a page's layout and design in CSS. Every element on a page can be thought of as a box, where each box has a 'content,' 'padding,' 'border,' and 'margin' attribute. Each of these attributes can be manipulated (along with other CSS attributes) to make an element display exactly how you want it to. From the inner-most layer to the outer layers it goes Content -> Padding -> Border -> Margin. Going along with a box representation, I like to think of it as packing something inside a box for shipping. Content is what you want to put in the box, which as the name implies is the content within your HTML tag that you want rendered on the screen. The border can be thought of as actual box holding your content, with padding being kind of like packing peanuts to keep the content in the box away from the edges. Now that we have our packed box, margin can be thought of as pushing any neighboring boxes away from our box as well as moving the box away from the edge of the shipping container the box is placed in. Each aspect of the box model (content, padding, border, and margin) can be altered individually to get your element to display exactly as desired.
 
 3. What is the difference between IDs and Classes?
+    Every HTML tag (<p>, <div>, <h1>, etc) can be styled using CSS, however, if there is ever a time where you want to change some elements without changing every element that shares that same HTML tag (or apply the same changes across multiple elements that don't share the same HTML tag) you will want to use Classes and/or IDs. The class and ID selectors go inside the HTML tag (example: <div class="myClass" id="myId">Content</div>) and allow you to target those specific elements in your CSS Styling. A main difference between classes and IDs is Classes are used when you want to make that styling available to multiple elements on your page, whereas ID is used when you want that styling to apply to only a single element. IDs should be unique and it is considered bad practice to reuse IDs on multiple elements. Another difference is that elements can have more than one class, seperated by a space (example: <p class="first second">), where each element should only have one ID. Classes and IDs are referenced in the CSS style sheet by placing a period before the class name ( .class {...}) and placing a hashtag before the ID (#id {...}).
+    
+    An important note is that if there are conflicts in css attributes, such as <p> element default margins differing from the margin you gave that specific <p> element through class or id selectors, CSS looks to the "specificity" of the selector to decide. CSS specificity from least specific/important to most specific/important is element -> class -> ID. This means that attributes defined on an ID will over-rule the same attributes defined on a Class which would over-rule that attribute defined on the element as a whole. Because of this, an element can have both a class and ID selector where class would set the styling except for the attributes over-ruled (or added) by the ID selector. This type of use can allow for cleaner code with less repeated portions if several elements have similar styling attributes with specific elements needing slight alterations.
 
-4. What is z-index (CSS property) useful for?
+4. What is z-index (CSS property) useful for? 
+    The Z-index property is useful in cases where you are going to have elements overlapping each other and you want to control which ones go over or under the other elements. 
+    
+    The term Z index is borrowed from a mathmatical graphing standpoint and can be somewhat confusing to someone who's never heard of it. Most are familiar whith how X and Y properties on a graph reference the position of an item from left to right and from up and down respectively. Graphs using only X and Y can be seen as 2D, however, if a point on the graph has a Z property this adds a 3D element to the graph. If your screen referenced the staring point for Z-index, a positive Z-index can be thought of as that object coming off your screen towards you while a negative Z-index would be as if the object moved away from you into your screen and behind anything with a higher Z index. Using the Z index property you are able to control which elements will show on top of overlapping elements and which ones will be hidden behind. 
+
+    Another way of thinking about it is thinking of stacked/overlapping elements as a stack of papers and the Z index determines the order in which the papers are stacked. The higher the Z index, the closer to the top of the stack that paper will appear (and any negative values being placed in the back) according the the Z index assigned to that paper(which represents the element on your page).  
 
 5. Summarize what the keyword 'this' is used for?
+    The keyword 'this' references the the containing object (also referenced as the context) of where you are calling the 'this' keyword. Similar to scope, where there is a global scope but it can also get more specific, 'this' can reference the global 'window' object context or a more specific context. Where scope pertains to functions and variable accessibility, Context and 'this' pertain to the containing object where 'this' is used. The global context, like when 'this' is used in an unbound function references the window and will remain in this context until prompted to change. One way this can change is through invoking a function which creates a new execution context, related in a way, to the scope of the function. These can be nested if needed and the this keyword can have different meanings depending on where you are within the nesting. 
+
+    An example is having a method within an object. Referencing the ‘this’ inside of the method will reference that specific object and the properties it has access to. It is possible to change the default context of a method through binding, such as using .bind .apply and .call to explicitly bind that method in the object to the context of another similar object. 
+
+    Specifically in React, this comes into play when passing functions down as props where you would need to directly bind the function to the current ‘this’ of the component or the context will change to the component where the function is actually being called. One way around having to explicitly bind that I’ve found helpful is to use the public class field syntax, which takes advantage of the fact that ES6 arrow functions don’t create their own context and will reference the context where the function originated.
+
 
 6. What is a callback? What are common uses for callbacks in JavaScript?
+    A callback is a function that is passed into a function as an argument. The callback function is generally invoked within the outer function and can have a direct impact on the output of the outer function. Common use cases for callbacks are in the Array.prototype methods such as .map, .forEach, .filter, etc. These prototypes take in a callback function that directly determines the result of the prototype function. For example, .filter  will take each item in the array and pass it into your callback function and if it returns true it will place it in the resulting array otherwise it will skip over it, hence 'filtering' the array. 
 
 7. What is a closure and why is it useful?
+    A closure references declaring a function within a function and generally returning the enclosed function. While a function returning a function may seem like extra and unecessary work, it gives that function access to global scope, the scope of the function it's in, and its own function scope, which essentially creates a private variable to be accessed only by that function. By declaring variables within the outer function they are inaccessable by any function or code not in that scope. Another important note is that the private variable is actually preserved so the closure will always be able to reference that variable. 
+    
+    A good example of this is a simple counter closure with a count variable set at 0 declared inside the outer function. Every time the inner function is invoked, it can increment the count, but it will increment it based off what it was after the last time so invoking it four times would return four and save count = 4 to be referenced the next time it is called. 
+    
+    Another awesome use of closures is to create multiple instances of the closure. Doing this would make it so they each keep a snapshot of their own private variable. Coming back to the counter example from above, creating counter1 and counter2 variables would create two different counter functions that work independently of each other. Counter1 would keep track of its own count and counter2 would do the same. That way if counter1 was invoked 2 times and then counter2 was invoked 4 times, the count for counter1 would still be 2. 
+    
+    //Preserved variable Snapshot of the result save variable result  
 
 8. How does a prototype work?
 
+    A prototype is a method attached to Classes/Constructor Functions (including, and most commonly, Classes associated each of the Data Types: Object, Array, String, etc). These methods are essentially functions that will take in a piece of data, and either return new data or alter the existing data depending on what that specific method does.
+    
+    Each data type has several built in prototypes attached to the corresponding data type Class that you can call on your data/variables. These prototypes are called using dot notation by calling the prototype method after a period immediately following the data/variable. Two examples showing both variable and raw data are: 
+    
+    myArrayVariable.map(callbackFunction) and [1, 2, 3, 4].map(callbackFunction)
+    
+    As seen here, the dot notation can be used on variables and raw data depending on your needs. Different protypes act differently and take in varying parameters, so make sure to look up the Docs for each specific prototype if you are unsure how that specific one works. 
+    Custom prototypes can be made by calling the Class you want to add it to, then prototype, then your prototype name. An example of this is: 
+    
+    Array.prototype.myPrototype = function(params) { return myResults }
+
+    Having created this prototype, we could then in theory call that prototype on any Array data since we added our custom prototype to the Array class, example: myArrayVariable.myPrototype() would accomplish what we coded our prototype to do. Another way of thinking about prototypes is to think of these prototype methods sitting on a shared shelf, and anything that is that Class type can pull it off and use it. 
+
 9. Describe what a component-based framework/library is?
+    Component-based frameworks involve taking what would be large, complex pieces of code and breaking them down into small, more compact, and often self-sustaining blocks of reusable code, or "components." By breaking the code down into pieces, it allows for each piece to be more focused on the specific feature it adds while keeping your code dry, succint, and more manageable. Since components are generally self-sufficient blocks of code, it is extremely easy to apply similar features across many web pages without the need to re-write the code on each page - as easy as copy/pasting, but a whole lot cleaner. Each compenent can also keep track of its own "state" or data that possibly will directly handle how the component is rendered as well as handle events such as onClick methods, etc.
+    In React, specifically, it is a component based library that also allows for uni-directional data flow which means that parent components can pass down data or methods through "props." This aspect of react allows component-based architecture to really shine since the child components can be customized depending on their parent component and the props passed down. This allows for dynamic combinations of components, and how they are rendered The architecure possibilities of your web page are extremely flexible and almost only limited by your creativity and understanding of it's capabilities as a component-based library.
+
 
 10. What is the component lifecycle in React?
+    The Component lifecycle in React refers to exactly what happens to each specific component as it is being loaded, rendered on the screen, and eventually being taken off the screen , or "unmounted." React's framework allows us to manipulate our components at each part of this life-cycle process through methods known as 'life-cycle hooks.' When a component needs to be used, it's initial set-up before anything loads on screen (or 'initialization) sets up state and props for that component. As the component is actually loading (or 'mounting'), there are different life-cycle hooks associated with before it's mounted (componentWillMount), it's actual rendering on the screen, and once it's finally rendered(componentDidMount). ComponentDidMount is one of the most used life-cycle hooks if an axios call to gather data from the backend in order to fully display the desired rendering on screen. Once it is finally rendered as intended, whether that component is updating through state or props or simply remaining displayed on the screen, there are several life-cycle hooks to alter the component as needed, such as ComponentDidUpdate. The final stage of the component lifecycle is when the component is no longer needed and going to unmount. The main life-cycle hook associated with unmounting is componentWillUnmount which handles any last second code that needs to run before the component is no longer there after unmounting. 
 
 11. What is REST? (not just a description of the acronym)
+    REST stands for REpresentational State Transfer and is generally used in reference to APIs and client-server data transfers. RESTful APIs take advantage of the guidlines indicating that it must be stateless, which means that the data transfer can't rely on stored code on either end in order to interpret the requests, as well as creating a uniform interface and allowing for layered data architecture. This allows for RESTful data to be passed from client-server interactions regardless if they are running in different languages or environments. This is extremely useful as front-end frameworks often run on different languages/versions/etc than their backend counterparts. 
+
+    Another aspect of RESTful API data transferring is the ability to manipulate data in what's sometimes called full CRUD (Create, Read, Update, Delete), or simply put it can get data, make new data, alter existing data, and lastly, delete data. A common package for RESTful APIs is Axios, which is often used for frontend-backend communications. In axios, full CRUD data transfers are available through four of it's available methods (and it's CRUD equivilant): Post (Create), Get (Read), Put(Update - though there are other options available for updating), and Delete (Delete).
 
 12. Name three common ways of getting data from a request (in Express.JS):
+    req.params references the actual URL of the request, if the server endpoint url was '/api/users/:id' and the specific call's url was axios.get('/api/users/3') the request would have a req.params.id set to the value of '3'.
 
+    req.body references the object sent with the request as the 'body' of the request (or second param). An example is axios.post('/api/createuser', {name: 'kenny'}). In this case, the request would have a req.body.name set to the value of 'kenny'. The req.body can include as many key value pairs as desired, same syntax as creating an object with multiple key value pairs seperated by commas.
+
+    The third common way of getting data off a request is through req.query. This will look somewhat similar to req.params but is more flexible because the end-point does not have to specify which queries (if any) it will take in. Like req.params, req.query looks at the URL in the request for its data. An example is: axios.get('/api/sports?type=soccer'). The endpoint for this request in the server would simply be '/api/sports' and could handle any number of queries as well as multiple queries at once. In this specific example, the request would have access to a req.query.type set to the value of 'soccer'. 
 
 
 -- =====================
@@ -36,10 +86,18 @@ email varchar(255)
 
 13. Given the Schema above, write the following four basic CRUD db queries using postgres syntax
 
--Get all users:
+-Get all users: SELECT * FROM users
 
--Create a new user with the name of 'your name' and an email of 'fake@fake.com':
+-Create a new user with the name of 'your name' and an email of 'fake@fake.com': 
+    INSERT INTO users (name, email)
+    VALUES ('your name', 'fake@fake.com')
+    RETURNING id - - //Returning id just to have the ID for the update below, otherwise the 'returning id' line is unecessary. 
 
 -Update the newly created user's name to 'Bobby Boy':
+    UPDATE users 
+    SET name='Bobby Boy'
+    WHERE id=${The ID returned from the create new User above}
 
 -Delete the newly updated user:
+    DELETE FROM users
+    WHERE id=${Same ID returned from the created user as above}
